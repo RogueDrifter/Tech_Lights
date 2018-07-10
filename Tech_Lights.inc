@@ -231,7 +231,7 @@ public rt_LightsDetector ()
 
     for (new i; i < MAX_RTLIGHTS; i++)
     {
-        if (!RT_LightsInfo[i][0][RT_LightsVerify]) continue;//To optimze till the latter types are added
+        if (!RT_LightsInfo[i][0][RT_LightsVerify]) continue;//To optimize till the latter types are added
 
         //Type 0:
         if (RTL_IsAnybodyNearLights(RT_LightsInfo[i][0][RT_LightsPosX], RT_LightsInfo[i][0][RT_LightsPosY], RT_LightsInfo[i][0][RT_LightsPosZ]))
