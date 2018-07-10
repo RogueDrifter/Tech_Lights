@@ -295,10 +295,14 @@ stock RTL_IsAnybodyNearLights (Float:LightPosX, Float:LightPosY, Float:LightPosZ
 }
 
 stock IsLightOn(LightID, LightType) 
+{
+    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     return RT_LightsInfo[LightID][LightType][RT_IsLightLit];
+} 
 
 stock HideLights(LightID, LightType)
 {
+    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     #if !defined CreateDynamicObject 
         DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
     #else 
@@ -311,10 +315,16 @@ stock HideLights(LightID, LightType)
 }
 
 stock ShowLights(LightID, LightType)
+{
+    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = false;
+}
 
 stock IsPlayerTriggeringLight(playerid, LightID, LightType)
+{
+    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     return (IsPlayerInRangeOfPoint (playerid, RTL_MAX_PLAYER_RANGE, RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ]) && RT_LightsInfo[LightID][LightType][RT_IsLightLit]);
+}
 
 #if defined FILTERSCRIPT
 
