@@ -153,7 +153,8 @@ stock DestroyAllLights (LightType)
 
 stock DestroyLights (LightID, LightType)
 {
-    if (!RT_LightsInfo[LightID][LightType][RT_LightsVerify] || LightType != 0) return 0;
+    if (0 > LightID >= MAX_RTLIGHTS || LightType != 0) return 0;
+    if (!RT_LightsInfo[LightID][LightType][RT_LightsVerify]) return 0;
 
     #if !defined CreateDynamicObject 
         DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
@@ -296,12 +297,14 @@ stock RTL_IsAnybodyNearLights (Float:LightPosX, Float:LightPosY, Float:LightPosZ
 
 stock IsLightOn(LightID, LightType) 
 {
+    if (0 > LightID >= MAX_RTLIGHTS || LightType != 0) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     return RT_LightsInfo[LightID][LightType][RT_IsLightLit];
 } 
 
 stock HideLights(LightID, LightType)
 {
+    if (0 > LightID >= MAX_RTLIGHTS || LightType != 0) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     #if !defined CreateDynamicObject 
         DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
@@ -316,12 +319,14 @@ stock HideLights(LightID, LightType)
 
 stock ShowLights(LightID, LightType)
 {
+    if (0 > LightID >= MAX_RTLIGHTS || LightType != 0) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = false;
 }
 
 stock IsPlayerTriggeringLight(playerid, LightID, LightType)
 {
+    if (0 > LightID >= MAX_RTLIGHTS || LightType != 0 || playerid > MAX_PLAYERS || playerid < 0) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     return (IsPlayerInRangeOfPoint (playerid, RTL_MAX_PLAYER_RANGE, RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ]) && RT_LightsInfo[LightID][LightType][RT_IsLightLit]);
 }
