@@ -14,7 +14,7 @@
 > All can be done through the test.pwn folder which already
 > contains the include and a simple test use of the functions.
 >
-> `## Version`: `1.0`
+> `## Version`: `2.0`
 
 ## Installation
 
@@ -47,8 +47,13 @@ Include in your code and begin using the library:
 ```
 > So yeah make sure your LightID is never below 0 or above the MAX_RTLIGHTS
 >
-> The second one (LightType) is something you shouldn't worry about for now, just use 0 because that's the only one available on version 1.0 later on i will add more light types (colored ones, blinking ones and so on) but for now it is always 0.
-
+> The second one (LightType) there are currently 3 types and the 4th one will be released soon, the current three ones (ranging from 0 to 2 as in 0,1,2) are white lights, red lights and blue lights in this respective order.
+```bash
+LightType:
+0- Normal white lights
+1- Colored lights red
+2- Colored lights blue
+```
 Almost all of the functions are self explanatory so the last thing here is:
 
 ```bash
@@ -91,7 +96,10 @@ sampctl package run
 > IsLightOn (LightID, LightType);
 >
 > IsPlayerTriggeringLight (playerid, LightID, LightType);
-
+>
+> ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
+>
+> MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 
 ## How to update:
 
