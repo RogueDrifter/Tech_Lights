@@ -81,10 +81,15 @@ sampctl package run
 
 > CreateLights (LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
 > DestroyLights (LightID, LightType);
+>
 > DestroyAllLights(LightType);
+>
 > HideLights(LightID, LightType);
+>
 > ShowLights(LightID, LightType);
+>
 > IsLightOn(LightID, LightType);
+>
 > IsPlayerTriggeringLight(playerid, LightID, LightType);
 
 
