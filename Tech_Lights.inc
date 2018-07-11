@@ -249,10 +249,11 @@ stock DestroyLights (LightID, LightType)
 public OnPlayerConnect(playerid)
 {
     for (new i; i < MAX_RTLIGHTS; i++)
-    {
-        RT_LightsToggle[playerid][i][0] = false;
-        RT_LightsToggle[playerid][i][1] = false;
-        RT_LightsToggle[playerid][i][2] = false;
+    {	
+    	for (new x; x < MAX_RTTYPES; x++)
+        {	
+        	RT_LightsToggle[playerid][i][x] = false;
+	}
     }
 
     #if defined RTL_OnPlayerConnect
