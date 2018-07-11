@@ -1,6 +1,5 @@
 /* 
 Made by RogueDrifter 2018 July 10th
-
 Updated: July 10th.
 
 Info:
@@ -159,12 +158,12 @@ stock DestroyAllLights (LightType)
             DestroyDynamicObject (RT_LightsInfo[i][LightType][RT_LightsNumbers]);
         #endif
 
-        RT_LightsInfo[i][LightType][RT_LightsPosX] = RTL_INVALID_LIGHTS_POS;
-        RT_LightsInfo[i][LightType][RT_LightsPosY] = RTL_INVALID_LIGHTS_POS;
-        RT_LightsInfo[i][LightType][RT_LightsPosZ] = RTL_INVALID_LIGHTS_POS;
-        RT_LightsInfo[i][LightType][RT_LightsPosRX] = RTL_INVALID_LIGHTS_POS;
-        RT_LightsInfo[i][LightType][RT_LightsPosRY] = RTL_INVALID_LIGHTS_POS;
-        RT_LightsInfo[i][LightType][RT_LightsPosRZ] = RTL_INVALID_LIGHTS_POS;
+        RT_LightsInfo[i][LightType][RT_LightsPosX] = 
+        RT_LightsInfo[i][LightType][RT_LightsPosY] =
+        RT_LightsInfo[i][LightType][RT_LightsPosZ] = 
+        RT_LightsInfo[i][LightType][RT_LightsPosRX] = 
+        RT_LightsInfo[i][LightType][RT_LightsPosRY] = 
+        RT_LightsInfo[i][LightType][RT_LightsPosRZ] = 
         RT_LightsInfo[i][LightType][RT_LightsDrawDistance] = RTL_INVALID_LIGHTS_POS;
 
         RT_LightsInfo[i][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
@@ -184,12 +183,12 @@ stock DestroyLights (LightID, LightType)
         DestroyDynamicObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
     #endif
 
-    RT_LightsInfo[LightID][LightType][RT_LightsPosX] = RTL_INVALID_LIGHTS_POS;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosY] = RTL_INVALID_LIGHTS_POS;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosZ] = RTL_INVALID_LIGHTS_POS;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = RTL_INVALID_LIGHTS_POS;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = RTL_INVALID_LIGHTS_POS;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = RTL_INVALID_LIGHTS_POS;
+    RT_LightsInfo[LightID][LightType][RT_LightsPosX] = 
+    RT_LightsInfo[LightID][LightType][RT_LightsPosY] = 
+    RT_LightsInfo[LightID][LightType][RT_LightsPosZ] = 
+    RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = 
+    RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = 
+    RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = 
     RT_LightsInfo[LightID][LightType][RT_LightsDrawDistance] = RTL_INVALID_LIGHTS_POS;
 
     RT_LightsInfo[LightID][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
@@ -275,7 +274,7 @@ public rt_LightsDetector ()
             {
                 if (!RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight])
                 {
-                    switch(x)
+                    switch (x)
                     {
                         case 0:
                         {
@@ -396,7 +395,7 @@ stock ToggleLightForPlayer(playerid, LightID, LightType, Toggle)
     if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES || playerid > MAX_PLAYERS || playerid < 0 || 0 > Toggle > 1) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
 
-    switch(Toggle)
+    switch (Toggle)
     {
         case 0:
         {
