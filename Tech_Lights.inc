@@ -358,7 +358,7 @@ public rt_LightsDetector ()
     return 1;
 }
 
-stock RTL_IsAnybodyNearLights (LightID, LightType, Float:LightPosX, Float:LightPosY, Float:LightPosZ)
+static RTL_IsAnybodyNearLights (LightID, LightType, Float:LightPosX, Float:LightPosY, Float:LightPosZ)
 {
     #if defined foreach 
 
