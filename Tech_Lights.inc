@@ -36,6 +36,12 @@ ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
 
 MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 -Usage: Will change the current position/rotation of a light.
+
+Callbacks:
+__________
+
+OnPlayerTriggerLight(playerid, LightID, LightType);
+OnLightGoOff(LightID, LightType);
 ________________________________________________________________________________________
 
 Definitions: (Use before including the file)
@@ -46,10 +52,8 @@ Definitions: (Use before including the file)
 #define RTL_MAX_PLAYER_RANGE (RANGE)
 -Usage: Used to define the range of which the player needs to be within in order for the lights to trigger.
 __________________________________
-
 To be added:
 ____________
-
 Intensity parameter to the CreateLights function (controls how bright the lights would be).
 Size parameter to the CreateLights function (controls the size of the lights).
 Another creating function editing the position from in-game.
@@ -102,6 +106,14 @@ static
     ;
 
 forward rt_LightsDetector();
+
+#if defined OnPlayerTriggerLight
+    forward OnPlayerTriggerLight(playerid, LightID, LightType);
+#endif
+
+#if defined OnLightGoOff
+    forward OnLightGoOff(LightID, LightType);
+#endif
 
 #if defined RTL_OnPlayerConnect
     forward RTL_OnPlayerConnect(playerid);
@@ -410,6 +422,10 @@ public rt_LightsDetector ()
                         DestroyDynamicObject (RT_LightsInfo[i][x][RT_LightsNumbers]);
                     #endif
 
+                    #if defined OnLightGoOff
+                        OnLightGoOff(i, x);
+                    #endif
+
                     RT_LightsInfo[i][x][RT_LightsNumbers] = INVALID_OBJECT_ID;
                     RT_LightsInfo[i][x][RT_IsLightLit] = false;
                 }
@@ -426,10 +442,14 @@ static RTL_IsAnybodyNearLights (LightID, LightType, Float:LightPosX, Float:Light
 
         foreach (new i: Player)
         {
-
             if (IsPlayerInRangeOfPoint (i, RTL_MAX_PLAYER_RANGE, LightPosX, LightPosY, LightPosZ) 
-            && GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[playerid][LightID][LightType]) 
+            && GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[playerid][LightID][LightType])
+            {
+                #if defined OnPlayerTriggerLight
+                    if(!IsLightOn(LightID, LightType)) OnPlayerTriggerLight(i, LightID, LightType);
+                #endif
                 return 1;
+            }
         }
 
     #else
@@ -440,7 +460,12 @@ static RTL_IsAnybodyNearLights (LightID, LightType, Float:LightPosX, Float:Light
 
             if (IsPlayerInRangeOfPoint (i, RTL_MAX_PLAYER_RANGE, LightPosX, LightPosY, LightPosZ)
             && GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[i][LightID][LightType]) 
+            {
+                #if defined OnPlayerTriggerLight
+                    if(!IsLightOn(LightID, LightType)) OnPlayerTriggerLight(i, LightID, LightType);
+                #endif
                 return 1;
+            }
         }
 
     #endif
@@ -536,7 +561,7 @@ stock ShowLights (LightID, LightType)
 stock IsPlayerTriggeringLight (playerid, LightID, LightType)
 {
     if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES || playerid > MAX_PLAYERS || playerid < 0) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false || RT_LightsToggle[playerid][LightID][LightType]) return 0;
     return (IsPlayerInRangeOfPoint (playerid, RTL_MAX_PLAYER_RANGE, RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ]) && RT_LightsInfo[LightID][LightType][RT_IsLightLit]);
 }
 
