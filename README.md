@@ -109,6 +109,11 @@ sampctl package run
 > ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
 >
 > MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
+>
+> OnPlayerTriggerLight(playerid, LightID, LightType);
+>
+> OnLightGoOff(LightID, LightType);
+>
 
 ## How to update:
 
