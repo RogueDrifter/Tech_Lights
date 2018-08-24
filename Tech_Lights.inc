@@ -25,6 +25,7 @@ HideLights (LightID, LightType);
 ShowLights (LightID, LightType);
 BlinkLights (LightID, LightType, Toggle);
 KeepLightsOn (LightID, LightType, Toggle);
+KeepAllLightsOn(LightType, Toggle);
 
 IsLightKeptOn(LightID, LightType);
 IsLightBlinking (LightID, LightType);
@@ -54,6 +55,7 @@ Definitions: (Use before including the file)
 __________________________________
 To be added:
 ____________
+
 Intensity parameter to the CreateLights function (controls how bright the lights would be).
 Size parameter to the CreateLights function (controls the size of the lights).
 Another creating function editing the position from in-game.
@@ -75,7 +77,10 @@ Another creating function editing the position from in-game.
     #define RTL_MAX_PLAYER_RANGE 12.5
 #endif
 
-#define RT_MAX_LIGHTS_CHECK 500
+#if !defined RT_MAX_LIGHTS_CHECK
+    #define RT_MAX_LIGHTS_CHECK 500
+#endif
+
 #define RTL_INVALID_LIGHTS_POS 9999.9999
 #define MAX_RTTYPES 3
 
@@ -507,6 +512,31 @@ stock KeepLightsOn(LightID, LightType, Toggle)
         case 1:
         {
             RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = true;
+        }
+    }
+    return 1;
+}
+
+stock KeepAllLightsOn(LightType, Toggle)
+{
+    if (0 > Toggle > 1) return 0;
+    if (0 > LightType >= MAX_RTTYPES) return 0;
+
+    for (new i; i < MAX_RTLIGHTS; i++)
+    {
+        if (RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
+
+        switch (Toggle)
+        {
+            case 0:
+            {
+                RT_LightsInfo[i][LightType][RT_KeepLightsOn] = false;
+            }
+
+            case 1:
+            {
+                RT_LightsInfo[i][LightType][RT_KeepLightsOn] = true;
+            }
         }
     }
     return 1;
