@@ -85,6 +85,7 @@ sampctl package run
 ## Contains:
 
 > CreateLights (LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
+>
 > DestroyLights (LightID, LightType);
 >
 > DestroyAllLights (LightType);
