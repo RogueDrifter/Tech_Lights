@@ -36,6 +36,7 @@ ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
 MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 -Usage: Will change the current position/rotation of a light.
 ________________________________________________________________________________________
+
 Definitions: (Use before including the file)
 
 #define MAX_RTLIGHTS (NUMBER)
@@ -44,6 +45,7 @@ Definitions: (Use before including the file)
 #define RTL_MAX_PLAYER_RANGE (RANGE)
 -Usage: Used to define the range of which the player needs to be within in order for the lights to trigger.
 __________________________________
+
 To be added:
 ____________
 Intensity parameter to the CreateLights function (controls how bright the lights would be).
@@ -409,7 +411,20 @@ stock KeepLightsOn(LightID, LightType, Toggle)
     if (0 > Toggle > 1) return 0;
     if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    return RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = Toggle;
+
+    switch (Toggle)
+    {
+        case 0:
+        {
+            RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = false;
+        }
+
+        case 1:
+        {
+            RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = true;
+        }
+    }
+    return 1;
 }
 
 stock BlinkLights (LightID, LightType, Toggle)
@@ -417,7 +432,7 @@ stock BlinkLights (LightID, LightType, Toggle)
     if (0 > Toggle > 1) return 0;
     if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    if ( (!RT_LightsInfo[LightID][x][RT_IsLightLit] || RT_LightsInfo[LightID][x][RT_BlocKLight]) && !RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] ) return 0;
+    if ( (!RT_LightsInfo[LightID][LightType][RT_IsLightLit] || RT_LightsInfo[LightID][LightType][RT_BlocKLight]) && !RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] ) return 0;
     
     switch (Toggle)
     {
