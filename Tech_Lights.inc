@@ -44,7 +44,6 @@ Definitions: (Use before including the file)
 #define RTL_MAX_PLAYER_RANGE (RANGE)
 -Usage: Used to define the range of which the player needs to be within in order for the lights to trigger.
 __________________________________
-
 To be added:
 ____________
 Intensity parameter to the CreateLights function (controls how bright the lights would be).
@@ -68,6 +67,7 @@ Another creating function editing the position from in-game.
     #define RTL_MAX_PLAYER_RANGE 12.5
 #endif
 
+#define RT_MAX_LIGHTS_CHECK 500
 #define RTL_INVALID_LIGHTS_POS 9999.9999
 #define MAX_RTTYPES 3
 
@@ -210,7 +210,7 @@ stock DestroyLights (LightID, LightType)
 
     public OnFilterScriptInit ()
     {
-        RT_LightsTimer = SetTimer ("rt_LightsDetector", 1000, true);
+        RT_LightsTimer = SetTimer ("rt_LightsDetector", RT_MAX_LIGHTS_CHECK, true);
 
         #if defined RTL_OnFilterScriptInit
             return RTL_OnFilterScriptInit ();
