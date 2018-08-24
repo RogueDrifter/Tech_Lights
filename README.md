@@ -99,6 +99,8 @@ sampctl package run
 >
 > KeepLightsOn(LightID, LightType, Toggle);
 >
+> KeepAllLightsOn(LightType, Toggle);
+>
 > IsLightKeptOn(LightID, LightType);
 >
 > IsLightBlinking (LightID, LightType);
