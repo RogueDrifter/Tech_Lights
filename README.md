@@ -84,6 +84,7 @@ sampctl package run
 
 ## Contains:
 
+# Functions:
 > CreateLights (LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
 >
 > DestroyLights (LightID, LightType);
@@ -110,6 +111,9 @@ sampctl package run
 >
 > MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 >
+
+# Callbacks:
+
 > OnPlayerTriggerLight(playerid, LightID, LightType);
 >
 > OnLightGoOff(LightID, LightType);
