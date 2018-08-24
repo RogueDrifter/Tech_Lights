@@ -36,7 +36,6 @@ ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
 MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 -Usage: Will change the current position/rotation of a light.
 ________________________________________________________________________________________
-
 Definitions: (Use before including the file)
 
 #define MAX_RTLIGHTS (NUMBER)
@@ -285,7 +284,7 @@ public rt_LightsDetector ()
 
             if (RTL_IsAnybodyNearLights(i, x, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ]))
             {
-                if (RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight] && RT_LightsInfo[i][x][RT_IsLightBlinking])
+                if (RT_LightsInfo[i][x][RT_IsLightBlinking])
                 {
                     switch (RT_LightsInfo[i][x][RT_TempLightBlink])
                     {
@@ -440,6 +439,7 @@ stock BlinkLights (LightID, LightType, Toggle)
         {
             RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = false;
             RT_LightsInfo[LightID][LightType][RT_TempLightBlink]  = false;
+            RT_LightsInfo[LightID][LightType][RT_BlocKLight]      = false;
         }
 
         case 1:
