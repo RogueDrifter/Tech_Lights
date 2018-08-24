@@ -5,6 +5,7 @@ Updated: August 23rd.
 Info:
 Lights that brighten up when players are around them close, also gives support to streamer users.
 ________________________________
+
 Functions: 
 
 CreateLights (LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
@@ -36,6 +37,7 @@ ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
 MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 -Usage: Will change the current position/rotation of a light.
 ________________________________________________________________________________________
+
 Definitions: (Use before including the file)
 
 #define MAX_RTLIGHTS (NUMBER)
@@ -47,6 +49,7 @@ __________________________________
 
 To be added:
 ____________
+
 Intensity parameter to the CreateLights function (controls how bright the lights would be).
 Size parameter to the CreateLights function (controls the size of the lights).
 Another creating function editing the position from in-game.
@@ -282,10 +285,10 @@ public rt_LightsDetector ()
         {
             if (!RT_LightsInfo[i][x][RT_LightsVerify]) continue;
 
-            if (RTL_IsAnybodyNearLights(i, x, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ]))
+            if (IsLightKeptOn(i, x))
             {
                 if (RT_LightsInfo[i][x][RT_IsLightBlinking])
-                {
+                {   
                     switch (RT_LightsInfo[i][x][RT_TempLightBlink])
                     {
                         case 0:
@@ -338,6 +341,64 @@ public rt_LightsDetector ()
                 }
             }
 
+            else
+            {
+                if (RTL_IsAnybodyNearLights(i, x, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ]))
+                {
+                    if (RT_LightsInfo[i][x][RT_IsLightBlinking])
+                    {   
+                        switch (RT_LightsInfo[i][x][RT_TempLightBlink])
+                        {
+                            case 0:
+                            {
+                                RT_LightsInfo[i][x][RT_TempLightBlink] = true;
+                                HideLights(i, x);
+                            }
+
+                            case 1:
+                            {
+                                RT_LightsInfo[i][x][RT_TempLightBlink] = false;
+                                ShowLights(i, x);
+                            }
+                        }
+                    }
+
+                    if (!RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight])
+                    {
+                        switch (x)
+                        {
+                            case 0:
+                            {
+                                #if !defined CreateDynamicObject 
+                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+                                #else 
+                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+                                #endif
+                            }
+
+                            case 1:
+                            {
+                                #if !defined CreateDynamicObject 
+                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+                                #else 
+                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+                                #endif
+                            }
+
+                            case 2:
+                            {
+                                #if !defined CreateDynamicObject 
+                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+                                #else 
+                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+                                #endif
+                            }
+                        }
+                        RT_LightsInfo[i][x][RT_IsLightLit] = true;
+                    }
+                }
+            }
+            
             if (!RTL_IsAnybodyNearLights(i, x, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ]))
             {
                 if (RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight] && !RT_LightsInfo[i][x][RT_KeepLightsOn])
@@ -462,7 +523,6 @@ stock HideLights (LightID, LightType)
 
     RT_LightsInfo[LightID][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
     RT_LightsInfo[LightID][LightType][RT_IsLightLit] = false;
-    RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = false;
     return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = true;
 }
 
