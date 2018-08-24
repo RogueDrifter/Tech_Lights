@@ -3,9 +3,9 @@
 [![sampctl](https://shields.southcla.ws/badge/sampctl-Tech_Lights-2f2f2f.svg?style=for-the-badge)](https://github.com/RogueDrifter/Tech_Lights)
 
 > This is an include that allows you to manipulate lights better, simply put this creates lights that only light up when someone
-> is near them within a range you can control, more functions will be added such as the intensity and much more.
+> is near them within a range you can control.
 >
-> UPDATED: July 10th - 2018
+> UPDATED: August 23rd - 2018
 >
 > `## Installation`: 
 > You simply include it in the script you want to use the lights in and use the functions as simple as that.
@@ -14,7 +14,7 @@
 > All can be done through the test.pwn folder which already
 > contains the include and a simple test use of the functions.
 >
-> `## Version`: `2.0`
+> `## Version`: `3.0`
 
 ## Installation
 
@@ -92,6 +92,14 @@ sampctl package run
 > HideLights (LightID, LightType);
 >
 > ShowLights (LightID, LightType);
+>
+> BlinkLights (LightID, LightType, Toggle);
+>
+> KeepLightsOn(LightID, LightType, Toggle);
+>
+> IsLightKeptOn(LightID, LightType);
+>
+> IsLightBlinking (LightID, LightType);
 >
 > IsLightOn (LightID, LightType);
 >
