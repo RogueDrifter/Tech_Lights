@@ -263,7 +263,7 @@ public OnPlayerConnect (playerid)
     	for (new x; x < MAX_RTTYPES; x++)
         {	
         	RT_LightsToggle[playerid][i][x] = false;
-	}
+	 }
     }
 
     #if defined RTL_OnPlayerConnect
