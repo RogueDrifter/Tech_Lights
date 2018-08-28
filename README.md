@@ -115,6 +115,8 @@ sampctl package run
 >
 > HideAllLights(LightType);
 >
+> BlinkToDestroyLights(LightID, LightType);
+>
 > MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 >
 
