@@ -34,6 +34,7 @@ IsLightKeptOn (LightID, LightType);
 IsLightBlinking (LightID, LightType);
 IsLightOn (LightID, LightType);
 IsPlayerTriggeringLight (playerid, LightID, LightType);
+IsLightValid (LightID, LightType);
 
 ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
 -Usage: Toggle 0 to turn the player's ability to light up lights off and 1 to go back to normal. 
@@ -493,6 +494,11 @@ stock IsLightKeptOn(LightID, LightType)
     return RT_LightsInfo[LightID][LightType][RT_KeepLightsOn];
 }
 
+stock IsLightValid (LightID, LightType)
+{
+    return RT_LightsInfo[LightID][LightType][RT_LightsVerify];
+}
+
 stock KeepLightsOn(LightID, LightType, Toggle)
 {
     if (0 > Toggle > 1) return 0;
@@ -519,8 +525,9 @@ stock BlinkToDestroyLights (LightID, LightType, Interval)
     if (Interval < 0) return 0;
     if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+    if (RT_LightsInfo[LightID][LightType][RT_IsLightBlinking]) return 0;
 
-    BlinkLights(LightID, LightType, 1);
+    RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = true;
     SetTimerEx("RT_BlinkToDestroy", Interval, false, "ii", LightID, LightType);
     return 1;
 }
