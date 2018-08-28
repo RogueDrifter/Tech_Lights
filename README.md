@@ -111,6 +111,10 @@ sampctl package run
 >
 > ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
 >
+> ShowAllLights(LightType);
+>
+> HideAllLights(LightType);
+>
 > MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 >
 
