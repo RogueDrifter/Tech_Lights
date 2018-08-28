@@ -26,6 +26,8 @@ ShowLights (LightID, LightType);
 BlinkLights (LightID, LightType, Toggle);
 KeepLightsOn (LightID, LightType, Toggle);
 KeepAllLightsOn(LightType, Toggle);
+ShowAllLights(LightType);
+HideAllLights(LightType);
 
 IsLightKeptOn(LightID, LightType);
 IsLightBlinking (LightID, LightType);
@@ -177,11 +179,7 @@ stock DestroyAllLights (LightType)
     {
         if (!RT_LightsInfo[i][LightType][RT_LightsVerify]) continue;
 
-        #if !defined CreateDynamicObject 
-            DestroyObject (RT_LightsInfo[i][LightType][RT_LightsNumbers]);
-        #else 
-            DestroyDynamicObject (RT_LightsInfo[i][LightType][RT_LightsNumbers]);
-        #endif
+        DestroyObject (RT_LightsInfo[i][LightType][RT_LightsNumbers]);
 
         RT_LightsInfo[i][LightType][RT_KeepLightsOn] = false;
         RT_LightsInfo[i][LightType][RT_IsLightBlinking] = false;
@@ -204,12 +202,7 @@ stock DestroyLights (LightID, LightType)
 {
     if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
     if (!RT_LightsInfo[LightID][LightType][RT_LightsVerify]) return 0;
-
-    #if !defined CreateDynamicObject 
-        DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
-    #else 
-        DestroyDynamicObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
-    #endif
+    DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
 
     RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = false;
     RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = false;
@@ -328,29 +321,17 @@ public rt_LightsDetector ()
                     {
                         case 0:
                         {
-                            #if !defined CreateDynamicObject 
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            #else 
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            #endif
+                            RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
                         }
 
                         case 1:
                         {
-                            #if !defined CreateDynamicObject 
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            #else 
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            #endif
+                            RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
                         }
 
                         case 2:
                         {
-                            #if !defined CreateDynamicObject 
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            #else 
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            #endif
+                            RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
                         }
                     }
 
@@ -386,29 +367,17 @@ public rt_LightsDetector ()
                         {
                             case 0:
                             {
-                                #if !defined CreateDynamicObject 
-                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                                #else 
-                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                                #endif
+                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
                             }
 
                             case 1:
                             {
-                                #if !defined CreateDynamicObject 
-                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                                #else 
-                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                                #endif
+                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
                             }
 
                             case 2:
                             {
-                                #if !defined CreateDynamicObject 
-                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                                #else 
-                                    RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                                #endif
+                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
                             }
                         }
                         RT_LightsInfo[i][x][RT_IsLightLit] = true;
@@ -421,11 +390,7 @@ public rt_LightsDetector ()
                 if (RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight] && !RT_LightsInfo[i][x][RT_KeepLightsOn])
                 {
 
-                    #if !defined CreateDynamicObject 
-                        DestroyObject (RT_LightsInfo[i][x][RT_LightsNumbers]);
-                    #else 
-                        DestroyDynamicObject (RT_LightsInfo[i][x][RT_LightsNumbers]);
-                    #endif
+                    DestroyObject (RT_LightsInfo[i][x][RT_LightsNumbers]);
 
                     #if defined OnLightGoOff
                         OnLightGoOff(i, x);
@@ -570,11 +535,7 @@ stock HideLights (LightID, LightType)
 {
     if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    #if !defined CreateDynamicObject 
-        DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
-    #else 
-        DestroyDynamicObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
-    #endif
+    DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
 
     RT_LightsInfo[LightID][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
     RT_LightsInfo[LightID][LightType][RT_IsLightLit] = false;
@@ -586,6 +547,30 @@ stock ShowLights (LightID, LightType)
     if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
     if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = false;
+}
+
+stock ShowAllLights(LightType)
+{
+    if (0 > LightType >= MAX_RTTYPES) return 0;
+
+    for (new i; i < MAX_RTLIGHTS; i++)
+    {
+        if (RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
+        RT_LightsInfo[i][LightType][RT_BlocKLight] = false;
+    }
+    return 1;
+}
+
+stock HideAllLights(LightType)
+{
+    if (0 > LightType >= MAX_RTTYPES) return 0;
+
+    for (new i; i < MAX_RTLIGHTS; i++)
+    {
+        if (RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
+        RT_LightsInfo[i][LightType][RT_BlocKLight] = true;
+    }
+    return 1;
 }
 
 stock IsPlayerTriggeringLight (playerid, LightID, LightType)
