@@ -97,11 +97,13 @@ sampctl package run
 >
 > BlinkLights (LightID, LightType, Toggle);
 >
-> KeepLightsOn(LightID, LightType, Toggle);
+> KeepLightsOn (LightID, LightType, Toggle);
 >
-> KeepAllLightsOn(LightType, Toggle);
+> KeepAllLightsOn (LightType, Toggle);
 >
-> IsLightKeptOn(LightID, LightType);
+> IsLightKeptOn (LightID, LightType);
+>
+> IsLightValid (LightID, LightType);
 >
 > IsLightBlinking (LightID, LightType);
 >
@@ -111,11 +113,11 @@ sampctl package run
 >
 > ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
 >
-> ShowAllLights(LightType);
+> ShowAllLights (LightType);
 >
-> HideAllLights(LightType);
+> HideAllLights (LightType);
 >
-> BlinkToDestroyLights(LightID, LightType);
+> BlinkToDestroyLights (LightID, LightType);
 >
 > MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 >
