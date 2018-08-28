@@ -491,11 +491,14 @@ stock IsLightBlinking (LightID, LightType)
 
 stock IsLightKeptOn(LightID, LightType)
 {
+    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
+    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
     return RT_LightsInfo[LightID][LightType][RT_KeepLightsOn];
 }
 
 stock IsLightValid (LightID, LightType)
 {
+    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
     return RT_LightsInfo[LightID][LightType][RT_LightsVerify];
 }
 
