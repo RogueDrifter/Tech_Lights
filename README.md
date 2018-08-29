@@ -137,6 +137,9 @@ sampctl package run
 sampctl package ensure
 ```
 
+## Example usage:
+Lights_Event: https://github.com/RogueDrifter/Lights_Event
+
 ## Non sampctl users:
 > Go get sampctl! 
 >
