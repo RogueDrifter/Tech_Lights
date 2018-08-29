@@ -1,5 +1,5 @@
 /* 
-Made by RogueDrifter 2018 July 10th
+Made by RogueDrifter 2018 July 10th.
 Updated: August 23rd.
 
 Info:
