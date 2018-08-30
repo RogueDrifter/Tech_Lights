@@ -5,10 +5,9 @@ Updated: August 23rd.
 Info:
 Lights that brighten up when players are around them close, also gives support to streamer users.
 ________________________________
-
 Functions: 
 
-CreateLights (LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
+CreateLights(LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
 
 LightType:
 0- Normal white lights
@@ -18,55 +17,55 @@ LightType:
 LightID:
 - Never goes below 0 or above MAX_RTLIGHTS
 
-DestroyLights (LightID, LightType);
-DestroyAllLights (LightType);
+DestroyLights(LightID, LightType);
+DestroyAllLights(LightType);
 
-HideLights (LightID, LightType);
-ShowLights (LightID, LightType);
-BlinkLights (LightID, LightType, Toggle);
-KeepLightsOn (LightID, LightType, Toggle);
-KeepAllLightsOn (LightType, Toggle);
-ShowAllLights (LightType);
-HideAllLights (LightType);
-BlinkToDestroyLights (LightID, LightType, Interval);
+HideLights(LightID, LightType);
+ShowLights(LightID, LightType);
+BlinkLights(LightID, LightType, bool:Toggle);
+KeepLightsOn(LightID, LightType, bool:Toggle);
+KeepAllLightsOn(LightType, bool:Toggle);
+ShowAllLights(LightType);
+HideAllLights(LightType);
+BlinkToDestroyLights(LightID, LightType, Interval);
 
-IsLightKeptOn (LightID, LightType);
-IsLightBlinking (LightID, LightType);
-IsLightOn (LightID, LightType);
-IsPlayerTriggeringLight (playerid, LightID, LightType);
-IsLightValid (LightID, LightType);
+IsLightKeptOn(LightID, LightType);
+IsLightBlinking(LightID, LightType);
+IsLightOn(LightID, LightType);
+IsPlayerTriggeringLight(playerid, LightID, LightType);
+IsLightValid(LightID, LightType);
 
-ToggleLightForPlayer (playerid, LightID, LightType, Toggle);
+ToggleLightForPlayer(playerid, LightID, LightType, bool:Toggle);
 -Usage: Toggle 0 to turn the player's ability to light up lights off and 1 to go back to normal. 
 
-MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
+MoveLights(LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 -Usage: Will change the current position/rotation of a light.
 
 Callbacks:
 __________
 
-OnPlayerTriggerLight (playerid, LightID, LightType);
-OnLightGoOff (LightID, LightType);
+OnPlayerTriggerLight(playerid, LightID, LightType);
+OnLightGoOff(LightID, LightType);
 ________________________________________________________________________________________
 
-Definitions: (Use before including the file)
+Definitions:(Use before including the file)
 
-#define MAX_RTLIGHTS (NUMBER)
+#define MAX_RTLIGHTS(NUMBER)
 -Usage: Used to define the maximum amount of lights you are going to use which is 100 by default.
 
-#define RTL_MAX_PLAYER_RANGE (RANGE)
+#define RTL_MAX_PLAYER_RANGE(RANGE)
 -Usage: Used to define the range of which the player needs to be within in order for the lights to trigger.
 __________________________________
 To be added:
 ____________
 
-Intensity parameter to the CreateLights function (controls how bright the lights would be).
-Size parameter to the CreateLights function (controls the size of the lights).
+Intensity parameter to the CreateLights function(controls how bright the lights would be).
+Size parameter to the CreateLights function(controls the size of the lights).
 Another creating function editing the position from in-game.
 */
 
 #if defined RTLIGHTS_included_
-    #endinput
+	#endinput
 #endif
 
 #define RTLIGHTS_included_
@@ -74,15 +73,15 @@ Another creating function editing the position from in-game.
 #include <a_samp>
 
 #if !defined MAX_RTLIGHTS
-    #define MAX_RTLIGHTS 100
+	#define MAX_RTLIGHTS 100
 #endif
 
 #if !defined RTL_MAX_PLAYER_RANGE
-    #define RTL_MAX_PLAYER_RANGE 12.5
+	#define RTL_MAX_PLAYER_RANGE 12.5
 #endif
 
 #if !defined RT_MAX_LIGHTS_CHECK
-    #define RT_MAX_LIGHTS_CHECK 500
+	#define RT_MAX_LIGHTS_CHECK 500
 #endif
 
 #define RTL_INVALID_LIGHTS_POS 9999.9999
@@ -90,569 +89,547 @@ Another creating function editing the position from in-game.
 
 enum RT_LIGHTS_INFO
 {
-    RT_LightsNumbers,
+	RT_LightsNumbers,
 
-    bool:RT_LightsVerify,
-    bool:RT_IsLightLit,
-    bool:RT_BlocKLight,
-    bool:RT_IsLightBlinking,
-    bool:RT_TempLightBlink,
-    bool:RT_KeepLightsOn,
-    
-    Float:RT_LightsPosX,
-    Float:RT_LightsPosY,
-    Float:RT_LightsPosZ,
-    Float:RT_LightsPosRX,
-    Float:RT_LightsPosRY,
-    Float:RT_LightsPosRZ,
-    Float:RT_LightsDrawDistance
+	bool:RT_LightsVerify,
+	bool:RT_IsLightLit,
+	bool:RT_BlocKLight,
+	bool:RT_IsLightBlinking,
+	bool:RT_TempLightBlink,
+	bool:RT_KeepLightsOn,
+	
+	Float:RT_LightsPosX,
+	Float:RT_LightsPosY,
+	Float:RT_LightsPosZ,
+	Float:RT_LightsPosRX,
+	Float:RT_LightsPosRY,
+	Float:RT_LightsPosRZ,
+	Float:RT_LightsDrawDistance
 }
 
 static 
-    RT_LightsInfo[MAX_RTLIGHTS][MAX_RTTYPES][RT_LIGHTS_INFO],
-    RT_LightsToggle[MAX_PLAYERS][MAX_RTLIGHTS][MAX_RTTYPES],
-    RT_LightsTimer
-    ;
+	RT_LightsInfo[MAX_RTLIGHTS][MAX_RTTYPES][RT_LIGHTS_INFO],
+	bool:RT_LightsToggle[MAX_PLAYERS][MAX_RTLIGHTS][MAX_RTTYPES],
+	RT_LightsTimer
+	;
 
-forward rt_LightsDetector ();
-forward RT_BlinkToDestroy (LightID, LightType);
+forward rt_LightsDetector();
+forward RT_BlinkToDestroy(LightID, LightType);
 
 #if defined OnPlayerTriggerLight
-    forward OnPlayerTriggerLight (playerid, LightID, LightType);
+	forward OnPlayerTriggerLight(playerid, LightID, LightType);
 #endif
 
 #if defined OnLightGoOff
-    forward OnLightGoOff (LightID, LightType);
+	forward OnLightGoOff(LightID, LightType);
 #endif
 
 #if defined RTL_OnPlayerConnect
-    forward RTL_OnPlayerConnect(playerid);
+	forward RTL_OnPlayerConnect(playerid);
 #endif
 
 #if defined FILTERSCRIPT
 
-    #if defined RTL_OnFilterScriptExit
-        forward RTL_OnFilterScriptExit();
-    #endif
+	#if defined RTL_OnFilterScriptExit
+		forward RTL_OnFilterScriptExit();
+	#endif
 
-    #if defined RTL_OnFilterScriptInit
-        forward RTL_OnFilterScriptInit();
-    #endif
+	#if defined RTL_OnFilterScriptInit
+		forward RTL_OnFilterScriptInit();
+	#endif
 
 #else
 
-    #if defined RTL_OnGameModeExit
-        forward RTL_OnGameModeExit();
-    #endif
+	#if defined RTL_OnGameModeExit
+		forward RTL_OnGameModeExit();
+	#endif
 
-    #if defined RTL_OnGameModeInit
-        forward RTL_OnGameModeInit();
-    #endif
+	#if defined RTL_OnGameModeInit
+		forward RTL_OnGameModeInit();
+	#endif
 
 #endif
-
-stock CreateLights (LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0)
-{
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] != false) return 0;
-
-    switch (LightType)
-    {
-        case 0..2:
-        {
-            RT_LightsInfo[LightID][LightType][RT_LightsPosX] = PosX;
-            RT_LightsInfo[LightID][LightType][RT_LightsPosY] = PosY;
-            RT_LightsInfo[LightID][LightType][RT_LightsPosZ] = PosZ;
-            RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = PosRX;
-            RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = PosRY;
-            RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = PosRZ;
-            RT_LightsInfo[LightID][LightType][RT_LightsDrawDistance] = DrawDistance;
-
-            RT_LightsInfo[LightID][LightType][RT_LightsVerify] = true;
-        }
-    }
-    return 1;
-}
-
-stock DestroyAllLights (LightType)
-{
-    if ( 0 > LightType >= MAX_RTTYPES) return 0;
-
-    for (new x; x < MAX_RTLIGHTS; x++)
-    {
-        if (!RT_LightsInfo[x][LightType][RT_LightsVerify]) continue;
-
-        #if defined foreach 
-            foreach (new i: Player)
-            {
-                RT_LightsToggle[i][x][LightType] = false;
-            }
-        #else
-            for (new i, j = GetPlayerPoolSize(); i <= j; i++)
-            {
-                RT_LightsToggle[i][x][LightType] = false;
-            }
-        #endif
-        DestroyObject (RT_LightsInfo[x][LightType][RT_LightsNumbers]);
-
-        RT_LightsInfo[x][LightType][RT_KeepLightsOn] = false;
-        RT_LightsInfo[x][LightType][RT_IsLightBlinking] = false;
-        RT_LightsInfo[x][LightType][RT_TempLightBlink]  = false;
-        RT_LightsInfo[x][LightType][RT_LightsPosX] = 
-        RT_LightsInfo[x][LightType][RT_LightsPosY] =
-        RT_LightsInfo[x][LightType][RT_LightsPosZ] = 
-        RT_LightsInfo[x][LightType][RT_LightsPosRX] = 
-        RT_LightsInfo[x][LightType][RT_LightsPosRY] = 
-        RT_LightsInfo[x][LightType][RT_LightsPosRZ] = 
-        RT_LightsInfo[x][LightType][RT_LightsDrawDistance] = RTL_INVALID_LIGHTS_POS;
-
-        RT_LightsInfo[x][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
-        RT_LightsInfo[x][LightType][RT_LightsVerify] = false;
-    }
-    return 1;
-}
-
-stock DestroyLights (LightID, LightType)
-{
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (!RT_LightsInfo[LightID][LightType][RT_LightsVerify]) return 0;
-
-    #if defined foreach 
-        foreach (new i: Player)
-        {
-            RT_LightsToggle[i][LightID][LightType] = false;
-        }
-    #else
-        for (new i, j = GetPlayerPoolSize(); i <= j; i++)
-        {
-            RT_LightsToggle[i][LightID][LightType] = false;
-        }
-    #endif
-
-    DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
-
-    RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = false;
-    RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = false;
-    RT_LightsInfo[LightID][LightType][RT_TempLightBlink]  = false;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosX] = 
-    RT_LightsInfo[LightID][LightType][RT_LightsPosY] = 
-    RT_LightsInfo[LightID][LightType][RT_LightsPosZ] = 
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = 
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = 
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = 
-    RT_LightsInfo[LightID][LightType][RT_LightsDrawDistance] = RTL_INVALID_LIGHTS_POS;
-
-    RT_LightsInfo[LightID][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
-    RT_LightsInfo[LightID][LightType][RT_LightsVerify] = false;
-    return 1;
-}
 
 #if defined FILTERSCRIPT
 
-    public OnFilterScriptInit ()
-    {
-        RT_LightsTimer = SetTimer ("rt_LightsDetector", RT_MAX_LIGHTS_CHECK, true);
+	public OnFilterScriptInit()
+	{
+		RT_LightsTimer = SetTimer("rt_LightsDetector", RT_MAX_LIGHTS_CHECK, true);
 
-        #if defined RTL_OnFilterScriptInit
-            return RTL_OnFilterScriptInit ();
-        #else
-            return 1;
-        #endif
-    }
+		#if defined RTL_OnFilterScriptInit
+			return RTL_OnFilterScriptInit();
+		#else
+			return 1;
+		#endif
+	}
 
-    public OnFilterScriptExit ()
-    {
-        KillTimer (RT_LightsTimer);
+	public OnFilterScriptExit()
+	{
+		KillTimer(RT_LightsTimer);
 
-        #if defined RTL_OnFilterScriptExit
-            return RTL_OnFilterScriptExit ();
-        #else
-            return 1;
-        #endif
-    }
+		#if defined RTL_OnFilterScriptExit
+			return RTL_OnFilterScriptExit();
+		#else
+			return 1;
+		#endif
+	}
 
 #else
 
-    public OnGameModeInit ()
-    {
-        RT_LightsTimer = SetTimer ("rt_LightsDetector", 1000, true);
+	public OnGameModeInit()
+	{
+		RT_LightsTimer = SetTimer("rt_LightsDetector", 1000, true);
 
-        #if defined RTL_OnGameModeInit
-            return RTL_OnGameModeInit ();
-        #else
-            return 1;
-        #endif
-    }
+		#if defined RTL_OnGameModeInit
+			return RTL_OnGameModeInit();
+		#else
+			return 1;
+		#endif
+	}
 
-    public OnGameModeExit ()
-    {
-        KillTimer (RT_LightsTimer);
+	public OnGameModeExit()
+	{
+		KillTimer(RT_LightsTimer);
 
-        #if defined RTL_OnGameModeExit
-            return RTL_OnGameModeExit ();
-        #else
-            return 1;
-        #endif
-    }
+		#if defined RTL_OnGameModeExit
+			return RTL_OnGameModeExit();
+		#else
+			return 1;
+		#endif
+	}
 
 #endif
 
-public OnPlayerConnect (playerid)
+public OnPlayerConnect(playerid)
 {
-    for (new i; i < MAX_RTLIGHTS; i++)
-    {	
-    	for (new x; x < MAX_RTTYPES; x++)
-        {	
-        	RT_LightsToggle[playerid][i][x] = false;
-	    }
-    }
+	for(new i; i < MAX_RTLIGHTS; i++)
+	{	
+		for(new x; x < MAX_RTTYPES; x++)
+		{	
+			RT_LightsToggle[playerid][i][x] = false;
+		}
+	}
 
-    #if defined RTL_OnPlayerConnect
-        return RTL_OnPlayerConnect(playerid);
-    #else
-        return 1;
-    #endif
+	#if defined RTL_OnPlayerConnect
+		return RTL_OnPlayerConnect(playerid);
+	#else
+		return 1;
+	#endif
 }
 
-public rt_LightsDetector ()
+public rt_LightsDetector()
 {
-    for (new i; i < MAX_RTLIGHTS; i++)
-    {
-        for (new x; x < MAX_RTTYPES; x++)
-        {
-            if (!RT_LightsInfo[i][x][RT_LightsVerify]) continue;
+	for(new i; i < MAX_RTLIGHTS; i++)
+	{
+		for(new x; x < MAX_RTTYPES; x++)
+		{
+			if(!RT_LightsInfo[i][x][RT_LightsVerify]) continue;
 
-            if (IsLightKeptOn(i, x))
-            {
-                if (RT_LightsInfo[i][x][RT_IsLightBlinking])
-                {   
-                    switch (RT_LightsInfo[i][x][RT_TempLightBlink])
-                    {
-                        case 0:
-                        {
-                            RT_LightsInfo[i][x][RT_TempLightBlink] = true;
-                            HideLights(i, x);
-                        }
+			if(IsLightKeptOn(i, x))
+			{
+				if(RT_LightsInfo[i][x][RT_IsLightBlinking])
+				{   
+					switch(RT_LightsInfo[i][x][RT_TempLightBlink])
+					{
+						case 0:
+						{
+							RT_LightsInfo[i][x][RT_TempLightBlink] = true;
+							HideLights(i, x);
+						}
 
-                        case 1:
-                        {
-                            RT_LightsInfo[i][x][RT_TempLightBlink] = false;
-                            ShowLights(i, x);
-                        }
-                    }
-                }
+						case 1:
+						{
+							RT_LightsInfo[i][x][RT_TempLightBlink] = false;
+							ShowLights(i, x);
+						}
+					}
+				}
 
-                if (!RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight])
-                {
-                    switch (x)
-                    {
-                        case 0:
-                        {
-                            RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                        }
+				if(!RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight])
+				{
+					switch(x)
+					{
+						case 0:
+						{
+							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+						}
 
-                        case 1:
-                        {
-                            RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                        }
+						case 1:
+						{
+							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+						}
 
-                        case 2:
-                        {
-                            RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                        }
-                    }
+						case 2:
+						{
+							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+						}
+					}
 
-                    RT_LightsInfo[i][x][RT_IsLightLit] = true;
-                }
-            }
+					RT_LightsInfo[i][x][RT_IsLightLit] = true;
+				}
+			}
 
-            else
-            {
-                if (RTL_IsAnybodyNearLights(i, x, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ]))
-                {
-                    if (RT_LightsInfo[i][x][RT_IsLightBlinking])
-                    {   
-                        switch (RT_LightsInfo[i][x][RT_TempLightBlink])
-                        {
-                            case 0:
-                            {
-                                RT_LightsInfo[i][x][RT_TempLightBlink] = true;
-                                HideLights(i, x);
-                            }
+			else
+			{
+				if(RTL_IsAnybodyNearLights(i, x, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ]))
+				{
+					if(RT_LightsInfo[i][x][RT_IsLightBlinking])
+					{   
+						switch(RT_LightsInfo[i][x][RT_TempLightBlink])
+						{
+							case 0:
+							{
+								RT_LightsInfo[i][x][RT_TempLightBlink] = true;
+								HideLights(i, x);
+							}
 
-                            case 1:
-                            {
-                                RT_LightsInfo[i][x][RT_TempLightBlink] = false;
-                                ShowLights(i, x);
-                            }
-                        }
-                    }
+							case 1:
+							{
+								RT_LightsInfo[i][x][RT_TempLightBlink] = false;
+								ShowLights(i, x);
+							}
+						}
+					}
 
-                    if (!RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight])
-                    {
-                        switch (x)
-                        {
-                            case 0:
-                            {
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            }
+					if(!RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight])
+					{
+						switch(x)
+						{
+							case 0:
+							{
+								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+							}
 
-                            case 1:
-                            {
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            }
+							case 1:
+							{
+								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+							}
 
-                            case 2:
-                            {
-                                RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject (18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
-                            }
-                        }
-                        RT_LightsInfo[i][x][RT_IsLightLit] = true;
-                    }
-                }
-            }
-            
-            if (!RTL_IsAnybodyNearLights(i, x, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ]))
-            {
-                if (RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight] && !RT_LightsInfo[i][x][RT_KeepLightsOn])
-                {
+							case 2:
+							{
+								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+							}
+						}
+						RT_LightsInfo[i][x][RT_IsLightLit] = true;
+					}
+				}
+			}
+			
+			if(!RTL_IsAnybodyNearLights(i, x, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ]))
+			{
+				if(RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight] && !RT_LightsInfo[i][x][RT_KeepLightsOn])
+				{
 
-                    DestroyObject (RT_LightsInfo[i][x][RT_LightsNumbers]);
+					DestroyObject(RT_LightsInfo[i][x][RT_LightsNumbers]);
 
-                    #if defined OnLightGoOff
-                        OnLightGoOff (i, x);
-                    #endif
+					#if defined OnLightGoOff
+						OnLightGoOff(i, x);
+					#endif
 
-                    RT_LightsInfo[i][x][RT_LightsNumbers] = INVALID_OBJECT_ID;
-                    RT_LightsInfo[i][x][RT_IsLightLit] = false;
-                }
-            }
-        }
-    }
+					RT_LightsInfo[i][x][RT_LightsNumbers] = INVALID_OBJECT_ID;
+					RT_LightsInfo[i][x][RT_IsLightLit] = false;
+				}
+			}
+		}
+	}
 
-    return 1;
+	return 1;
 }
 
-public RT_BlinkToDestroy (LightID, LightType)
+public RT_BlinkToDestroy(LightID, LightType)
 {
-    if (!RT_LightsInfo[LightID][LightType][RT_IsLightBlinking]) return 0;
-    return DestroyLights(LightID, LightType);
+	if(!RT_LightsInfo[LightID][LightType][RT_IsLightBlinking]) return 0;
+	return DestroyLights(LightID, LightType);
 }
 
-static RTL_IsAnybodyNearLights (LightID, LightType, Float:LightPosX, Float:LightPosY, Float:LightPosZ)
+static RTL_IsAnybodyNearLights(LightID, LightType, Float:LightPosX, Float:LightPosY, Float:LightPosZ)
 {
-    #if defined foreach 
+	#if defined foreach 
 
-        foreach (new i: Player)
-        {
-            if (IsPlayerInRangeOfPoint (i, RTL_MAX_PLAYER_RANGE, LightPosX, LightPosY, LightPosZ) 
-            && GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[playerid][LightID][LightType])
-            {
-                #if defined OnPlayerTriggerLight
-                    if (!IsLightOn(LightID, LightType)) OnPlayerTriggerLight (i, LightID, LightType);
-                #endif
-                return 1;
-            }
-        }
+		foreach(new i: Player)
+		{
+			if(IsPlayerInRangeOfPoint(i, RTL_MAX_PLAYER_RANGE, LightPosX, LightPosY, LightPosZ) 
+			&& GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[playerid][LightID][LightType])
+			{
+				#if defined OnPlayerTriggerLight
+					if(!IsLightOn(LightID, LightType)) OnPlayerTriggerLight(i, LightID, LightType);
+				#endif
+				return 1;
+			}
+		}
 
-    #else
+	#else
 
-        for (new i, j = GetPlayerPoolSize(); i <= j; i++)
-        {
-            if (!IsPlayerConnected (i)) continue;
+		for(new i, j = GetPlayerPoolSize(); i <= j; i++)
+		{
+			if(!IsPlayerConnected(i)) continue;
 
-            if (IsPlayerInRangeOfPoint (i, RTL_MAX_PLAYER_RANGE, LightPosX, LightPosY, LightPosZ)
-            && GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[i][LightID][LightType]) 
-            {
-                #if defined OnPlayerTriggerLight
-                    if (!IsLightOn(LightID, LightType)) OnPlayerTriggerLight (i, LightID, LightType);
-                #endif
-                return 1;
-            }
-        }
+			if(IsPlayerInRangeOfPoint(i, RTL_MAX_PLAYER_RANGE, LightPosX, LightPosY, LightPosZ)
+			&& GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[i][LightID][LightType]) 
+			{
+				#if defined OnPlayerTriggerLight
+					if(!IsLightOn(LightID, LightType)) OnPlayerTriggerLight(i, LightID, LightType);
+				#endif
+				return 1;
+			}
+		}
 
-    #endif
-    return 0;
+	#endif
+	return 0;
 }
 
-stock IsLightOn (LightID, LightType) 
+stock CreateLights(LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    return RT_LightsInfo[LightID][LightType][RT_IsLightLit];
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] != false) return 0;
+
+	switch(LightType)
+	{
+		case 0..2:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosX] = PosX;
+			RT_LightsInfo[LightID][LightType][RT_LightsPosY] = PosY;
+			RT_LightsInfo[LightID][LightType][RT_LightsPosZ] = PosZ;
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = PosRX;
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = PosRY;
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = PosRZ;
+			RT_LightsInfo[LightID][LightType][RT_LightsDrawDistance] = DrawDistance;
+
+			RT_LightsInfo[LightID][LightType][RT_LightsVerify] = true;
+		}
+	}
+	return 1;
+}
+
+stock DestroyAllLights(LightType)
+{
+	if( 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+
+	for(new x; x < MAX_RTLIGHTS; x++)
+	{
+		if(!RT_LightsInfo[x][LightType][RT_LightsVerify]) continue;
+
+		#if defined foreach 
+			foreach(new i: Player)
+			{
+				RT_LightsToggle[i][x][LightType] = false;
+			}
+		#else
+			for(new i, j = GetPlayerPoolSize(); i <= j; i++)
+			{
+				RT_LightsToggle[i][x][LightType] = false;
+			}
+		#endif
+		DestroyObject(RT_LightsInfo[x][LightType][RT_LightsNumbers]);
+
+		RT_LightsInfo[x][LightType][RT_KeepLightsOn] = false;
+		RT_LightsInfo[x][LightType][RT_IsLightBlinking] = false;
+		RT_LightsInfo[x][LightType][RT_TempLightBlink]  = false;
+		RT_LightsInfo[x][LightType][RT_LightsPosX] = 
+		RT_LightsInfo[x][LightType][RT_LightsPosY] =
+		RT_LightsInfo[x][LightType][RT_LightsPosZ] = 
+		RT_LightsInfo[x][LightType][RT_LightsPosRX] = 
+		RT_LightsInfo[x][LightType][RT_LightsPosRY] = 
+		RT_LightsInfo[x][LightType][RT_LightsPosRZ] = 
+		RT_LightsInfo[x][LightType][RT_LightsDrawDistance] = RTL_INVALID_LIGHTS_POS;
+
+		RT_LightsInfo[x][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
+		RT_LightsInfo[x][LightType][RT_LightsVerify] = false;
+	}
+	return 1;
+}
+
+stock DestroyLights(LightID, LightType)
+{
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(!RT_LightsInfo[LightID][LightType][RT_LightsVerify]) return 0;
+
+	#if defined foreach 
+		foreach(new i: Player)
+		{
+			RT_LightsToggle[i][LightID][LightType] = false;
+		}
+	#else
+		for(new i, j = GetPlayerPoolSize(); i <= j; i++)
+		{
+			RT_LightsToggle[i][LightID][LightType] = false;
+		}
+	#endif
+
+	DestroyObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
+
+	RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = false;
+	RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = false;
+	RT_LightsInfo[LightID][LightType][RT_TempLightBlink]  = false;
+	RT_LightsInfo[LightID][LightType][RT_LightsPosX] = 
+	RT_LightsInfo[LightID][LightType][RT_LightsPosY] = 
+	RT_LightsInfo[LightID][LightType][RT_LightsPosZ] = 
+	RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = 
+	RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = 
+	RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = 
+	RT_LightsInfo[LightID][LightType][RT_LightsDrawDistance] = RTL_INVALID_LIGHTS_POS;
+
+	RT_LightsInfo[LightID][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
+	RT_LightsInfo[LightID][LightType][RT_LightsVerify] = false;
+	return 1;
+}
+
+stock IsLightOn(LightID, LightType) 
+{
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	return RT_LightsInfo[LightID][LightType][RT_IsLightLit];
 } 
 
-stock IsLightBlinking (LightID, LightType)
+stock IsLightBlinking(LightID, LightType)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    return RT_LightsInfo[LightID][LightType][RT_IsLightBlinking];
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	return RT_LightsInfo[LightID][LightType][RT_IsLightBlinking];
 }
 
 stock IsLightKeptOn(LightID, LightType)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    return RT_LightsInfo[LightID][LightType][RT_KeepLightsOn];
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	return RT_LightsInfo[LightID][LightType][RT_KeepLightsOn];
 }
 
-stock IsLightValid (LightID, LightType)
+stock IsLightValid(LightID, LightType)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    return RT_LightsInfo[LightID][LightType][RT_LightsVerify];
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	return RT_LightsInfo[LightID][LightType][RT_LightsVerify];
 }
 
-stock KeepLightsOn(LightID, LightType, Toggle)
+stock KeepLightsOn(LightID, LightType, bool:Toggle)
 {
-    if (0 > Toggle > 1) return 0;
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	if(0 > Toggle || Toggle > 1) return 0;
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
 
-    switch (Toggle)
-    {
-        case 0:
-        {
-            RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = false;
-        }
 
-        case 1:
-        {
-            RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = true;
-        }
-    }
-    return 1;
+	RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = Toggle;
+	return 1;
 }
 
-stock BlinkToDestroyLights (LightID, LightType, Interval)
+stock BlinkToDestroyLights(LightID, LightType, Interval)
 {
-    if (Interval < 0) return 0;
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_IsLightBlinking]) return 0;
+	if(Interval < 0) return 0;
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_IsLightBlinking]) return 0;
 
-    RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = true;
-    SetTimerEx("RT_BlinkToDestroy", Interval, false, "ii", LightID, LightType);
-    return 1;
+	RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = true;
+	SetTimerEx("RT_BlinkToDestroy", Interval, false, "ii", LightID, LightType);
+	return 1;
 }
 
-stock KeepAllLightsOn(LightType, Toggle)
+stock KeepAllLightsOn(LightType, bool:Toggle)
 {
-    if (0 > Toggle > 1) return 0;
-    if (0 > LightType >= MAX_RTTYPES) return 0;
+	if(0 > Toggle || Toggle > 1) return 0;
+	if(0 > LightType || LightType >= MAX_RTTYPES) return 0;
 
-    for (new i; i < MAX_RTLIGHTS; i++)
-    {
-        if (RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
-
-        switch (Toggle)
-        {
-            case 0:
-            {
-                RT_LightsInfo[i][LightType][RT_KeepLightsOn] = false;
-            }
-
-            case 1:
-            {
-                RT_LightsInfo[i][LightType][RT_KeepLightsOn] = true;
-            }
-        }
-    }
-    return 1;
+	for(new i; i < MAX_RTLIGHTS; i++)
+	{
+		if(RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
+		RT_LightsInfo[i][LightType][RT_KeepLightsOn] = Toggle;
+	}
+	return 1;
 }
 
-stock BlinkLights (LightID, LightType, Toggle)
+stock BlinkLights(LightID, LightType, bool:Toggle)
 {
-    if (0 > Toggle > 1) return 0;
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    if ( (!RT_LightsInfo[LightID][LightType][RT_IsLightLit] || RT_LightsInfo[LightID][LightType][RT_BlocKLight]) && !RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] ) return 0;
-    
-    switch (Toggle)
-    {
-        case 0:
-        {
-            RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = false;
-            RT_LightsInfo[LightID][LightType][RT_TempLightBlink]  = false;
-            RT_LightsInfo[LightID][LightType][RT_BlocKLight]      = false;
-        }
+	if(0 > Toggle || Toggle > 1) return 0;
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	if((!RT_LightsInfo[LightID][LightType][RT_IsLightLit] || RT_LightsInfo[LightID][LightType][RT_BlocKLight]) && !RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] ) return 0;
+	
+	switch(Toggle)
+	{
+		case 0:
+		{
+			RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = false;
+			RT_LightsInfo[LightID][LightType][RT_TempLightBlink]  = false;
+			RT_LightsInfo[LightID][LightType][RT_BlocKLight]	  = false;
+		}
 
-        case 1:
-        {
-            RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = true;
-        }
-    } 
-    return 1;
+		case 1:
+		{
+			RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = true;
+		}
+	} 
+	return 1;
 }
 
-stock HideLights (LightID, LightType)
+stock HideLights(LightID, LightType)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    DestroyObject (RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	DestroyObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
 
-    RT_LightsInfo[LightID][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
-    RT_LightsInfo[LightID][LightType][RT_IsLightLit] = false;
-    return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = true;
+	RT_LightsInfo[LightID][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
+	RT_LightsInfo[LightID][LightType][RT_IsLightLit] = false;
+	return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = true;
 }
 
-stock ShowLights (LightID, LightType)
+stock ShowLights(LightID, LightType)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-    return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = false;
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = false;
 }
 
-stock ShowAllLights (LightType)
+stock ShowAllLights(LightType)
 {
-    if (0 > LightType >= MAX_RTTYPES) return 0;
+	if(0 > LightType || LightType >= MAX_RTTYPES) return 0;
 
-    for (new i; i < MAX_RTLIGHTS; i++)
-    {
-        if (RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
-        RT_LightsInfo[i][LightType][RT_BlocKLight] = false;
-    }
-    return 1;
+	for(new i; i < MAX_RTLIGHTS; i++)
+	{
+		if(RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
+		RT_LightsInfo[i][LightType][RT_BlocKLight] = false;
+	}
+	return 1;
 }
 
-stock HideAllLights (LightType)
+stock HideAllLights(LightType)
 {
-    if (0 > LightType >= MAX_RTTYPES) return 0;
+	if(0 > LightType || LightType >= MAX_RTTYPES) return 0;
 
-    for (new i; i < MAX_RTLIGHTS; i++)
-    {
-        if (RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
-        RT_LightsInfo[i][LightType][RT_BlocKLight] = true;
-    }
-    return 1;
+	for(new i; i < MAX_RTLIGHTS; i++)
+	{
+		if(RT_LightsInfo[i][LightType][RT_LightsVerify] == false) continue;
+		RT_LightsInfo[i][LightType][RT_BlocKLight] = true;
+	}
+	return 1;
 }
 
-stock IsPlayerTriggeringLight (playerid, LightID, LightType)
+stock IsPlayerTriggeringLight(playerid, LightID, LightType)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES || playerid > MAX_PLAYERS || playerid < 0) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false || RT_LightsToggle[playerid][LightID][LightType]) return 0;
-    return (IsPlayerInRangeOfPoint (playerid, RTL_MAX_PLAYER_RANGE, RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ]) && RT_LightsInfo[LightID][LightType][RT_IsLightLit]);
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES || playerid > MAX_PLAYERS || playerid < 0) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false || RT_LightsToggle[playerid][LightID][LightType]) return 0;
+	return(IsPlayerInRangeOfPoint(playerid, RTL_MAX_PLAYER_RANGE, RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ]) && RT_LightsInfo[LightID][LightType][RT_IsLightLit]);
 }
 
-stock ToggleLightForPlayer (playerid, LightID, LightType, Toggle)
+stock ToggleLightForPlayer(playerid, LightID, LightType, bool:Toggle)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES || playerid > MAX_PLAYERS || playerid < 0 || 0 > Toggle > 1) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES || playerid > MAX_PLAYERS || playerid < 0 || 0 > Toggle || Toggle > 1) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
 
-    return RT_LightsToggle[playerid][LightID][LightType] = !Toggle;
+	return RT_LightsToggle[playerid][LightID][LightType] = !Toggle;
 }
 
-stock MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ)
+stock MoveLights(LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ)
 {
-    if (0 > LightID >= MAX_RTLIGHTS || 0 > LightType >= MAX_RTTYPES) return 0;
-    if (RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
 
-    RT_LightsInfo[LightID][LightType][RT_LightsPosX] = ToX;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosY] = ToY;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosZ] = ToZ;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = ToRX;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = ToRY;
-    RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = ToRZ;
-    return 1;
+	RT_LightsInfo[LightID][LightType][RT_LightsPosX] = ToX;
+	RT_LightsInfo[LightID][LightType][RT_LightsPosY] = ToY;
+	RT_LightsInfo[LightID][LightType][RT_LightsPosZ] = ToZ;
+	RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = ToRX;
+	RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = ToRY;
+	RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = ToRZ;
+	return 1;
 }
 
 #if defined _ALS_OnPlayerConnect
