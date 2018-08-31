@@ -5,7 +5,7 @@
 > This is an include that allows you to manipulate lights better, simply put this creates lights that only light up when someone
 > is near them within a range you can control.
 >
-> UPDATED: August 23rd - 2018
+> UPDATED: August 30th - 2018
 >
 > `## Installation`: 
 > You simply include it in the script you want to use the lights in and use the functions as simple as that.
