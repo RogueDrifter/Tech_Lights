@@ -1,6 +1,6 @@
 /* 
 Made by RogueDrifter 2018 July 10th.
-Updated: August 23rd.
+Updated: August 30th.
 
 Info:
 Lights that brighten up when players are around them close, also gives support to streamer users.
