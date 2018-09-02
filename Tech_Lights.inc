@@ -1,6 +1,6 @@
 /* 
 Made by RogueDrifter 2018 July 10th.
-Updated: August 30th.
+Updated: September 2nd.
 
 Info:
 Lights that brighten up when players are around them close, also gives support to streamer users.
@@ -28,6 +28,7 @@ KeepAllLightsOn(LightType, bool:Toggle);
 ShowAllLights(LightType);
 HideAllLights(LightType);
 BlinkToDestroyLights(LightID, LightType, Interval);
+PointLights(LightID, LightType, Direction);
 
 IsLightKeptOn(LightID, LightType);
 IsLightBlinking(LightID, LightType);
@@ -86,6 +87,10 @@ Another creating function editing the position from in-game.
 
 #define RTL_INVALID_LIGHTS_POS 9999.9999
 #define MAX_RTTYPES 3
+#define LIGHTS_DIRECTION_UP		0
+#define LIGHTS_DIRECTION_DOWN	1
+#define LIGHTS_DIRECTION_LEFT	2
+#define LIGHTS_DIRECTION_RIGHT	3
 
 enum RT_LIGHTS_INFO
 {
@@ -506,10 +511,7 @@ stock KeepLightsOn(LightID, LightType, bool:Toggle)
 	if(0 > Toggle || Toggle > 1) return 0;
 	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
 	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-
-
-	RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = Toggle;
-	return 1;
+	return RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = Toggle;
 }
 
 stock BlinkToDestroyLights(LightID, LightType, Interval)
@@ -629,6 +631,34 @@ stock MoveLights(LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX
 	RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = ToRX;
 	RT_LightsInfo[LightID][LightType][RT_LightsPosRY] = ToRY;
 	RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = ToRZ;
+	return 1;
+}
+
+stock PointLights(LightID, LightType, Direction)
+{
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(Direction < 0 || Direction > 3) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+
+	switch(Direction)
+	{
+		case LIGHTS_DIRECTION_UP:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = 91.0000;
+		}
+		case LIGHTS_DIRECTION_DOWN:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = -91.0000;
+		}
+		case LIGHTS_DIRECTION_LEFT:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = 91.0000;
+		}
+		case LIGHTS_DIRECTION_RIGHT:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = -91.0000;
+		}
+	}
 	return 1;
 }
 
