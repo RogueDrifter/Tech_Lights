@@ -1,25 +1,19 @@
 /* 
 Made by RogueDrifter 2018 July 10th.
 Updated: September 2nd.
-
 Info:
 Lights that brighten up when players are around them close, also gives support to streamer users.
 ________________________________
 Functions: 
-
 CreateLights(LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
-
 LightType:
 0- Normal white lights
 1- Colored lights red
 2- Colored lights blue
-
 LightID:
 - Never goes below 0 or above MAX_RTLIGHTS
-
 DestroyLights(LightID, LightType);
 DestroyAllLights(LightType);
-
 HideLights(LightID, LightType);
 ShowLights(LightID, LightType);
 BlinkLights(LightID, LightType, bool:Toggle);
@@ -29,37 +23,28 @@ ShowAllLights(LightType);
 HideAllLights(LightType);
 BlinkToDestroyLights(LightID, LightType, Interval);
 PointLights(LightID, LightType, Direction);
-
 IsLightKeptOn(LightID, LightType);
 IsLightBlinking(LightID, LightType);
 IsLightOn(LightID, LightType);
 IsPlayerTriggeringLight(playerid, LightID, LightType);
 IsLightValid(LightID, LightType);
-
 ToggleLightForPlayer(playerid, LightID, LightType, bool:Toggle);
 -Usage: Toggle 0 to turn the player's ability to light up lights off and 1 to go back to normal. 
-
 MoveLights(LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 -Usage: Will change the current position/rotation of a light.
-
 Callbacks:
 __________
-
 OnPlayerTriggerLight(playerid, LightID, LightType);
 OnLightGoOff(LightID, LightType);
 ________________________________________________________________________________________
-
 Definitions:(Use before including the file)
-
 #define MAX_RTLIGHTS(NUMBER)
 -Usage: Used to define the maximum amount of lights you are going to use which is 100 by default.
-
 #define RTL_MAX_PLAYER_RANGE(RANGE)
 -Usage: Used to define the range of which the player needs to be within in order for the lights to trigger.
 __________________________________
 To be added:
 ____________
-
 Intensity parameter to the CreateLights function(controls how bright the lights would be).
 Size parameter to the CreateLights function(controls the size of the lights).
 Another creating function editing the position from in-game.
@@ -528,7 +513,7 @@ stock BlinkToDestroyLights(LightID, LightType, Interval)
 
 stock KeepAllLightsOn(LightType, bool:Toggle)
 {
-	if(0 > Toggle || Toggle > 1) return 0;
+	if(Toggle != true && Toggle != false) return 0;
 	if(0 > LightType || LightType >= MAX_RTTYPES) return 0;
 
 	for(new i; i < MAX_RTLIGHTS; i++)
@@ -541,7 +526,7 @@ stock KeepAllLightsOn(LightType, bool:Toggle)
 
 stock BlinkLights(LightID, LightType, bool:Toggle)
 {
-	if(0 > Toggle || Toggle > 1) return 0;
+	if(Toggle != true && Toggle != false) return 0;
 	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
 	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
 	if((!RT_LightsInfo[LightID][LightType][RT_IsLightLit] || RT_LightsInfo[LightID][LightType][RT_BlocKLight]) && !RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] ) return 0;
