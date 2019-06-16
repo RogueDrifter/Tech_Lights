@@ -1,8 +1,7 @@
-/* 
-Made by RogueDrifter 2018 July 10th.
-Updated: September 2nd.
+/* Made by RogueDrifter 2018 July 10th.
+Updated: 2019 16th of June.
 Info:
-Lights that brighten up when players are around them close, also gives support to streamer users.
+Lights that brighten up when players are around them close.
 ________________________________
 Functions: 
 CreateLights(LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
@@ -12,6 +11,7 @@ LightType:
 2- Colored lights blue
 LightID:
 - Never goes below 0 or above MAX_RTLIGHTS
+
 DestroyLights(LightID, LightType);
 DestroyAllLights(LightType);
 HideLights(LightID, LightType);
@@ -21,17 +21,25 @@ KeepLightsOn(LightID, LightType, bool:Toggle);
 KeepAllLightsOn(LightType, bool:Toggle);
 ShowAllLights(LightType);
 HideAllLights(LightType);
+
 BlinkToDestroyLights(LightID, LightType, Interval);
+-Usage: This will blink lights for an interval and then destroy them after the interval is over.
+
 PointLights(LightID, LightType, Direction);
+DanceLights(LightID, LightTyp);
+
 IsLightKeptOn(LightID, LightType);
 IsLightBlinking(LightID, LightType);
 IsLightOn(LightID, LightType);
 IsPlayerTriggeringLight(playerid, LightID, LightType);
 IsLightValid(LightID, LightType);
+
 ToggleLightForPlayer(playerid, LightID, LightType, bool:Toggle);
 -Usage: Toggle 0 to turn the player's ability to light up lights off and 1 to go back to normal. 
+
 MoveLights(LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 -Usage: Will change the current position/rotation of a light.
+
 Callbacks:
 __________
 OnPlayerTriggerLight(playerid, LightID, LightType);
@@ -47,8 +55,7 @@ To be added:
 ____________
 Intensity parameter to the CreateLights function(controls how bright the lights would be).
 Size parameter to the CreateLights function(controls the size of the lights).
-Another creating function editing the position from in-game.
-*/
+Another creating function editing the position from in-game. */
 
 #if defined RTLIGHTS_included_
 	#endinput
@@ -76,6 +83,7 @@ Another creating function editing the position from in-game.
 #define LIGHTS_DIRECTION_DOWN	1
 #define LIGHTS_DIRECTION_LEFT	2
 #define LIGHTS_DIRECTION_RIGHT	3
+#define RTL_LIGHTS_DANCE_SPEED 3.0
 
 enum RT_LIGHTS_INFO
 {
@@ -87,7 +95,9 @@ enum RT_LIGHTS_INFO
 	bool:RT_IsLightBlinking,
 	bool:RT_TempLightBlink,
 	bool:RT_KeepLightsOn,
-	
+	bool:RT_LightsDancing,
+	bool:RT_LightsDancingShift,
+
 	Float:RT_LightsPosX,
 	Float:RT_LightsPosY,
 	Float:RT_LightsPosZ,
@@ -215,7 +225,16 @@ public rt_LightsDetector()
 		{
 			if(!RT_LightsInfo[i][x][RT_LightsVerify]) continue;
 
-			if(IsLightKeptOn(i, x))
+			if(RT_LightsInfo[i][x][RT_LightsDancing])
+			{
+				if(!IsObjectMoving(RT_LightsInfo[i][x][RT_LightsNumbers]))
+				{
+					if(RT_LightsInfo[i][x][RT_LightsDancingShift]) MoveObject(RT_LightsInfo[i][x][RT_LightsNumbers], RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], 91.00000), RT_LightsInfo[i][x][RT_LightsDancingShift] = false;
+					else if(!RT_LightsInfo[i][x][RT_LightsDancingShift]) MoveObject(RT_LightsInfo[i][x][RT_LightsNumbers], RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], -91.00000), RT_LightsInfo[i][x][RT_LightsDancingShift] = true;
+				}
+			}
+
+			if(RT_LightsInfo[i][x][RT_KeepLightsOn])
 			{
 				if(RT_LightsInfo[i][x][RT_IsLightBlinking])
 				{   
@@ -332,6 +351,34 @@ public RT_BlinkToDestroy(LightID, LightType)
 	return DestroyLights(LightID, LightType);
 }
 
+static PointLightsInternal(LightID, LightType, Direction)
+{
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(Direction < 0 || Direction > 3) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+
+	switch(Direction)
+	{
+		case LIGHTS_DIRECTION_UP:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = 91.0000;
+		}
+		case LIGHTS_DIRECTION_DOWN:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = -91.0000;
+		}
+		case LIGHTS_DIRECTION_LEFT:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = 91.0000;
+		}
+		case LIGHTS_DIRECTION_RIGHT:
+		{
+			RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = -91.0000;
+		}
+	}
+	return 1;
+}
+
 static RTL_IsAnybodyNearLights(LightID, LightType, Float:LightPosX, Float:LightPosY, Float:LightPosZ)
 {
 	#if defined foreach 
@@ -342,7 +389,7 @@ static RTL_IsAnybodyNearLights(LightID, LightType, Float:LightPosX, Float:LightP
 			&& GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[playerid][LightID][LightType])
 			{
 				#if defined OnPlayerTriggerLight
-					if(!IsLightOn(LightID, LightType)) OnPlayerTriggerLight(i, LightID, LightType);
+					if(!RT_LightsInfo[LightID][LightType][RT_IsLightLit]) OnPlayerTriggerLight(i, LightID, LightType);
 				#endif
 				return 1;
 			}
@@ -358,7 +405,7 @@ static RTL_IsAnybodyNearLights(LightID, LightType, Float:LightPosX, Float:LightP
 			&& GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[i][LightID][LightType]) 
 			{
 				#if defined OnPlayerTriggerLight
-					if(!IsLightOn(LightID, LightType)) OnPlayerTriggerLight(i, LightID, LightType);
+					if(!RT_LightsInfo[LightID][LightType][RT_IsLightLit]) OnPlayerTriggerLight(i, LightID, LightType);
 				#endif
 				return 1;
 			}
@@ -645,6 +692,39 @@ stock PointLights(LightID, LightType, Direction)
 		}
 	}
 	return 1;
+}
+
+stock DanceLights(LightID, LightType, bool:toggle)
+{
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+
+	switch(toggle)
+	{
+		case true:
+		{
+			if(RT_LightsInfo[LightID][LightType][RT_LightsDancing]) return 0;
+			RT_LightsInfo[LightID][LightType][RT_LightsDancing] = true;
+			PointLightsInternal(LightID, LightType, LIGHTS_DIRECTION_RIGHT);
+			RT_LightsInfo[LightID][LightType][RT_LightsDancingShift] = true;
+		}
+
+		case false:
+		{
+			if(!RT_LightsInfo[LightID][LightType][RT_LightsDancing]) return 0;
+			StopObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
+			RT_LightsInfo[LightID][LightType][RT_LightsDancing] = false;
+		}
+	}
+	return 1;
+}
+
+stock GetLightObjectID(LightID, LightType)
+{
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return INVALID_OBJECT_ID;
+	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return INVALID_OBJECT_ID;
+
+	return RT_LightsInfo[LightID][LightType][RT_LightsNumbers];
 }
 
 #if defined _ALS_OnPlayerConnect
