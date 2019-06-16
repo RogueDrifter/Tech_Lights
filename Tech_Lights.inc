@@ -21,6 +21,7 @@ KeepLightsOn(LightID, LightType, bool:Toggle);
 KeepAllLightsOn(LightType, bool:Toggle);
 ShowAllLights(LightType);
 HideAllLights(LightType);
+GetLightObjectID(LightID, LightType)
 
 BlinkToDestroyLights(LightID, LightType, Interval);
 -Usage: This will blink lights for an interval and then destroy them after the interval is over.
