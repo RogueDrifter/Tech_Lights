@@ -5,7 +5,7 @@
 This is an include that allows you to manipulate lights better, simply put this creates lights that only light up when someone<br/>
  is near them within a range you can control.<br/>
 <br/>
-UPDATED: Sept 2nd - 2018<br/>
+UPDATED: June 16th - 2019<br/>
 <br/>
 `Installation`: <br/>
 You simply include it in the script you want to use the lights in and use the functions as simple as that.<br/>
@@ -121,7 +121,11 @@ ShowAllLights (LightType);
 
 HideAllLights (LightType);
 
-BlinkToDestroyLights (LightID, LightType);
+BlinkToDestroyLights (LightID, LightType);  
+
+GetLightObjectID(LightID, LightType);
+
+DanceLights(LightID, LightTyp);  
 
 MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 
