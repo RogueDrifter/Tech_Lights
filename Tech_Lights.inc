@@ -352,7 +352,7 @@ public RT_BlinkToDestroy(LightID, LightType)
 	return DestroyLights(LightID, LightType);
 }
 
-static PointLightsInternal(LightID, LightType, Direction)
+static stock PointLightsInternal(LightID, LightType, Direction)
 {
 	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
 	if(Direction < 0 || Direction > 3) return 0;
