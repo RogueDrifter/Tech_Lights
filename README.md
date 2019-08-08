@@ -87,7 +87,7 @@ sampctl package run
 ## Functions:
 
 ```pawn
-CreateLights (LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0);
+CreateLights (LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = RTL_MAX_PLAYER_RANGE);
 
 DestroyLights (LightID, LightType);
 
