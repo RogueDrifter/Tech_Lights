@@ -125,7 +125,7 @@ BlinkToDestroyLights (LightID, LightType);
 
 GetLightObjectID(LightID, LightType);
 
-DanceLights(LightID, LightTyp);  
+DanceLights(LightID, LightType, bool:toggle);  
 
 MoveLights (LightID, LightType, Float:ToX, Float:ToY, Float:ToZ, Float:ToRX, Float:ToRY, Float:ToRZ);
 
