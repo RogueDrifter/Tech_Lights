@@ -387,7 +387,7 @@ static RTL_IsAnybodyNearLights(LightID, LightType, Float:LightPosX, Float:LightP
 		foreach(new i: Player)
 		{
 			if(IsPlayerInRangeOfPoint(i, RTL_MAX_PLAYER_RANGE, LightPosX, LightPosY, LightPosZ) 
-			&& GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[playerid][LightID][LightType])
+			&& GetPlayerState(i) != PLAYER_STATE_SPECTATING && !RT_LightsToggle[i][LightID][LightType])
 			{
 				#if defined OnPlayerTriggerLight
 					if(!RT_LightsInfo[LightID][LightType][RT_IsLightLit]) OnPlayerTriggerLight(i, LightID, LightType);
