@@ -44,6 +44,11 @@ The maximum amount of lights to be created is a 100 by default which you can con
 
 ```bash
 #define MAX_RTLIGHTS (NUMBER)
+
+//Use this for types:
+#define LIGHT_TYPE_WHITE 0
+#define LIGHT_TYPE_RED 1
+#define LIGHT_TYPE_BLUE 2
 ```
 So yeah make sure your LightID is never below 0 or above the MAX_RTLIGHTS<br/>
 <br/>
