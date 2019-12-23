@@ -27,7 +27,7 @@ BlinkToDestroyLights(LightID, LightType, Interval);
 -Usage: This will blink lights for an interval and then destroy them after the interval is over.
 
 PointLights(LightID, LightType, Direction);
-DanceLights(LightID, LightTyp);
+DanceLights(LightID, LightType, bool:toggle);
 
 IsLightKeptOn(LightID, LightType);
 IsLightBlinking(LightID, LightType);
@@ -78,13 +78,17 @@ Another creating function editing the position from in-game. */
 	#define RT_MAX_LIGHTS_CHECK 500
 #endif
 
+#define LIGHT_TYPE_WHITE 0
+#define LIGHT_TYPE_RED 1
+#define LIGHT_TYPE_BLUE 2
+
 #define RTL_INVALID_LIGHTS_POS 9999.9999
 #define MAX_RTTYPES 3
 #define LIGHTS_DIRECTION_UP		0
 #define LIGHTS_DIRECTION_DOWN	1
 #define LIGHTS_DIRECTION_LEFT	2
 #define LIGHTS_DIRECTION_RIGHT	3
-#define RTL_LIGHTS_DANCE_SPEED 3.0
+#define RTL_LIGHTS_DANCE_SPEED 0.1
 
 enum RT_LIGHTS_INFO
 {
@@ -230,8 +234,16 @@ public rt_LightsDetector()
 			{
 				if(!IsObjectMoving(RT_LightsInfo[i][x][RT_LightsNumbers]))
 				{
-					if(RT_LightsInfo[i][x][RT_LightsDancingShift]) MoveObject(RT_LightsInfo[i][x][RT_LightsNumbers], RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], 91.00000), RT_LightsInfo[i][x][RT_LightsDancingShift] = false;
-					else if(!RT_LightsInfo[i][x][RT_LightsDancingShift]) MoveObject(RT_LightsInfo[i][x][RT_LightsNumbers], RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], -91.00000), RT_LightsInfo[i][x][RT_LightsDancingShift] = true;
+					if(RT_LightsInfo[i][x][RT_LightsDancingShift]) 
+					{
+						MoveDynamicObject(RT_LightsInfo[i][x][RT_LightsNumbers], RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], 91.00000);
+						RT_LightsInfo[i][x][RT_LightsDancingShift] = false;
+					}
+					else if(!RT_LightsInfo[i][x][RT_LightsDancingShift])
+					{
+						MoveDynamicObject(RT_LightsInfo[i][x][RT_LightsNumbers], RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], -91.00000);
+						RT_LightsInfo[i][x][RT_LightsDancingShift] = true;
+					}
 				}
 			}
 
@@ -260,18 +272,18 @@ public rt_LightsDetector()
 					switch(x)
 					{
 						case 0:
-						{
-							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+						{	
+							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject(18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance]);
 						}
 
 						case 1:
 						{
-							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject(18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance]);
 						}
 
 						case 2:
 						{
-							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+							RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject(18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance]);
 						}
 					}
 
@@ -307,17 +319,17 @@ public rt_LightsDetector()
 						{
 							case 0:
 							{
-								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject(18656, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance]);
 							}
 
 							case 1:
 							{
-								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject(18657, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance]);
 							}
 
 							case 2:
 							{
-								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateObject(18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], RT_LightsInfo[i][x][RT_LightsDrawDistance]);
+								RT_LightsInfo[i][x][RT_LightsNumbers] = CreateDynamicObject(18658, RT_LightsInfo[i][x][RT_LightsPosX], RT_LightsInfo[i][x][RT_LightsPosY], RT_LightsInfo[i][x][RT_LightsPosZ], RT_LightsInfo[i][x][RT_LightsPosRX], RT_LightsInfo[i][x][RT_LightsPosRY], RT_LightsInfo[i][x][RT_LightsPosRZ], -1, -1, -1, RT_LightsInfo[i][x][RT_LightsDrawDistance]);
 							}
 						}
 						RT_LightsInfo[i][x][RT_IsLightLit] = true;
@@ -330,8 +342,7 @@ public rt_LightsDetector()
 				if(RT_LightsInfo[i][x][RT_IsLightLit] && !RT_LightsInfo[i][x][RT_BlocKLight] && !RT_LightsInfo[i][x][RT_KeepLightsOn])
 				{
 
-					DestroyObject(RT_LightsInfo[i][x][RT_LightsNumbers]);
-
+					DestroyDynamicObject(RT_LightsInfo[i][x][RT_LightsNumbers]);
 					#if defined OnLightGoOff
 						OnLightGoOff(i, x);
 					#endif
@@ -363,18 +374,22 @@ static stock PointLightsInternal(LightID, LightType, Direction)
 		case LIGHTS_DIRECTION_UP:
 		{
 			RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = 91.0000;
+			MoveDynamicObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers], RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[LightID][LightType][RT_LightsPosRX], RT_LightsInfo[LightID][LightType][RT_LightsPosRY], RT_LightsInfo[LightID][LightType][RT_LightsPosRZ]);
 		}
 		case LIGHTS_DIRECTION_DOWN:
 		{
 			RT_LightsInfo[LightID][LightType][RT_LightsPosRX] = -91.0000;
+			MoveDynamicObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers], RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[LightID][LightType][RT_LightsPosRX], RT_LightsInfo[LightID][LightType][RT_LightsPosRY], RT_LightsInfo[LightID][LightType][RT_LightsPosRZ]);
 		}
 		case LIGHTS_DIRECTION_LEFT:
 		{
 			RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = 91.0000;
+			MoveDynamicObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers], RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[LightID][LightType][RT_LightsPosRX], RT_LightsInfo[LightID][LightType][RT_LightsPosRY], RT_LightsInfo[LightID][LightType][RT_LightsPosRZ]);
 		}
 		case LIGHTS_DIRECTION_RIGHT:
 		{
 			RT_LightsInfo[LightID][LightType][RT_LightsPosRZ] = -91.0000;
+			MoveDynamicObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers], RT_LightsInfo[LightID][LightType][RT_LightsPosX], RT_LightsInfo[LightID][LightType][RT_LightsPosY], RT_LightsInfo[LightID][LightType][RT_LightsPosZ], RTL_LIGHTS_DANCE_SPEED, RT_LightsInfo[LightID][LightType][RT_LightsPosRX], RT_LightsInfo[LightID][LightType][RT_LightsPosRY], RT_LightsInfo[LightID][LightType][RT_LightsPosRZ]);
 		}
 	}
 	return 1;
@@ -416,7 +431,7 @@ static RTL_IsAnybodyNearLights(LightID, LightType, Float:LightPosX, Float:LightP
 	return 0;
 }
 
-stock CreateLights(LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = 0.0)
+stock CreateLights(LightType, LightID, Float:PosX, Float:PosY, Float:PosZ, Float:PosRX, Float:PosRY, Float:PosRZ, Float:DrawDistance = RTL_MAX_PLAYER_RANGE)
 {
 	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
 	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] != false) return 0;
@@ -458,8 +473,7 @@ stock DestroyAllLights(LightType)
 				RT_LightsToggle[i][x][LightType] = false;
 			}
 		#endif
-		DestroyObject(RT_LightsInfo[x][LightType][RT_LightsNumbers]);
-
+		DestroyDynamicObject(RT_LightsInfo[x][LightType][RT_LightsNumbers]);
 		RT_LightsInfo[x][LightType][RT_KeepLightsOn] = false;
 		RT_LightsInfo[x][LightType][RT_IsLightBlinking] = false;
 		RT_LightsInfo[x][LightType][RT_TempLightBlink]  = false;
@@ -494,8 +508,7 @@ stock DestroyLights(LightID, LightType)
 		}
 	#endif
 
-	DestroyObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
-
+	DestroyDynamicObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
 	RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = false;
 	RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = false;
 	RT_LightsInfo[LightID][LightType][RT_TempLightBlink]  = false;
@@ -541,7 +554,7 @@ stock IsLightValid(LightID, LightType)
 
 stock KeepLightsOn(LightID, LightType, bool:Toggle)
 {
-	if(0 > Toggle || Toggle > 1) return 0;
+	if(Toggle != true && Toggle != false) return 0;
 	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
 	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
 	return RT_LightsInfo[LightID][LightType][RT_KeepLightsOn] = Toggle;
@@ -600,8 +613,7 @@ stock HideLights(LightID, LightType)
 {
 	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
 	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-	DestroyObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
-
+	DestroyDynamicObject(RT_LightsInfo[LightID][LightType][RT_LightsNumbers]);
 	RT_LightsInfo[LightID][LightType][RT_LightsNumbers] = INVALID_OBJECT_ID;
 	RT_LightsInfo[LightID][LightType][RT_IsLightLit] = false;
 	return RT_LightsInfo[LightID][LightType][RT_BlocKLight] = true;
@@ -647,7 +659,8 @@ stock IsPlayerTriggeringLight(playerid, LightID, LightType)
 
 stock ToggleLightForPlayer(playerid, LightID, LightType, bool:Toggle)
 {
-	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES || playerid > MAX_PLAYERS || playerid < 0 || 0 > Toggle || Toggle > 1) return 0;
+	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES || playerid > MAX_PLAYERS || playerid < 0) return 0;
+	if(Toggle != true && Toggle != false) return 0;
 	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
 
 	return RT_LightsToggle[playerid][LightID][LightType] = !Toggle;
@@ -699,6 +712,7 @@ stock DanceLights(LightID, LightType, bool:toggle)
 {
 	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
 	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
+	if(toggle != true && toggle != false) return 0;
 
 	switch(toggle)
 	{
