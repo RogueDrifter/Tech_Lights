@@ -594,14 +594,14 @@ stock BlinkLights(LightID, LightType, bool:Toggle)
 	
 	switch(Toggle)
 	{
-		case 0:
+		case false:
 		{
 			RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = false;
 			RT_LightsInfo[LightID][LightType][RT_TempLightBlink]  = false;
 			RT_LightsInfo[LightID][LightType][RT_BlocKLight]	  = false;
 		}
 
-		case 1:
+		case true:
 		{
 			RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] = true;
 		}
