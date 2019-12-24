@@ -590,7 +590,6 @@ stock BlinkLights(LightID, LightType, bool:Toggle)
 	if(Toggle != true && Toggle != false) return 0;
 	if(0 > LightID || LightID >= MAX_RTLIGHTS || 0 > LightType || LightType >= MAX_RTTYPES) return 0;
 	if(RT_LightsInfo[LightID][LightType][RT_LightsVerify] == false) return 0;
-	if((!RT_LightsInfo[LightID][LightType][RT_IsLightLit] || RT_LightsInfo[LightID][LightType][RT_BlocKLight]) && !RT_LightsInfo[LightID][LightType][RT_IsLightBlinking] ) return 0;
 	
 	switch(Toggle)
 	{
