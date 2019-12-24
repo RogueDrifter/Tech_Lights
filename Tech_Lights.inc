@@ -88,7 +88,7 @@ Another creating function editing the position from in-game. */
 #define LIGHTS_DIRECTION_DOWN	1
 #define LIGHTS_DIRECTION_LEFT	2
 #define LIGHTS_DIRECTION_RIGHT	3
-#define RTL_LIGHTS_DANCE_SPEED 0.01
+#define RTL_LIGHTS_DANCE_SPEED 0.09
 
 enum RT_LIGHTS_INFO
 {
