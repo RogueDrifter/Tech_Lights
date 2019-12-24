@@ -183,7 +183,7 @@ forward RT_BlinkToDestroy(LightID, LightType);
 
 	public OnGameModeInit()
 	{
-		RT_LightsTimer = SetTimer("rt_LightsDetector", 1000, true);
+		RT_LightsTimer = SetTimer("rt_LightsDetector", RT_MAX_LIGHTS_CHECK, true);
 
 		#if defined RTL_OnGameModeInit
 			return RTL_OnGameModeInit();
